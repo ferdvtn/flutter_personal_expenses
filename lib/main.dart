@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide_part_4/widgets/transaction_user.dart';
+import './models/transaction.dart';
+import './widgets/transaction_new.dart';
+import './widgets/transaction_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,7 +12,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Expense Planner',
       themeMode: ThemeMode.dark,
       home: MyHomePage(appBarTitle: 'FCG : Part 4'),
@@ -18,22 +20,84 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  MyHomePage({required this.appBarTitle, Key? key}) : super(key: key);
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({required this.appBarTitle, Key? key}) : super(key: key);
 
   final String appBarTitle;
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  final List<Transaction> _userTransactions = [
+    Transaction(
+      id: 't1',
+      title: 'New Shoes',
+      amount: 69.99,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: 't2',
+      title: 'Weekly Groceries',
+      amount: 16.53,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: 't3',
+      title: 'Gas',
+      amount: 20,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: 't4',
+      title: 'Breaking Time',
+      amount: 2.8,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: 't5',
+      title: 'App Purchase',
+      amount: 12,
+      date: DateTime.now(),
+    ),
+  ];
+
+  void _addNewTransaction(String txTitle, double txAmount) {
+    final newTx = Transaction(
+      id: DateTime.now().toString(),
+      title: txTitle,
+      amount: txAmount,
+      date: DateTime.now(),
+    );
+
+    setState(() {
+      _userTransactions.add(newTx);
+    });
+  }
+
+  void openModalTransaction() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext modalContext) {
+        return GestureDetector(
+          onTap: () {},
+          behavior: HitTestBehavior.opaque,
+          child: TransactionNew(_addNewTransaction),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(appBarTitle),
+        title: Text(widget.appBarTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {},
+            onPressed: openModalTransaction,
           ),
         ],
       ),
@@ -49,7 +113,7 @@ class MyHomePage extends StatelessWidget {
               height: null,
               width: double.infinity,
               child: const Card(
-                color: Colors.purpleAccent,
+                color: Colors.purple,
                 elevation: 3,
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
@@ -57,15 +121,16 @@ class MyHomePage extends StatelessWidget {
                 ),
               ),
             ),
-            const TransactionUser(),
+            TransactionList(_userTransactions),
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         elevation: 3,
-        onPressed: () {},
+        backgroundColor: Colors.purple,
         child: const Icon(Icons.add),
+        onPressed: openModalTransaction,
       ),
     );
   }
