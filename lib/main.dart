@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light,
         fontFamily: 'OpenSans',
         primarySwatch: Colors.purple,
-        accentColor: Colors.blue,
+        accentColor: Colors.blue, // ignore: deprecated_member_use
         textTheme: const TextTheme(
           headline6: TextStyle(fontWeight: FontWeight.bold),
         ),
