@@ -49,10 +49,7 @@ class _TransactionNewState extends State<TransactionNew> {
             ),
             TextButton(
               onPressed: () => submitTransaction(),
-              child: const Text(
-                'Add Transaction',
-                style: TextStyle(color: Colors.purple),
-              ),
+              child: const Text('Add Transaction'),
             )
           ],
         ),

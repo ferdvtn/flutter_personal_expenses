@@ -12,10 +12,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Expense Planner',
-      themeMode: ThemeMode.dark,
-      home: MyHomePage(appBarTitle: 'FCG : Part 4'),
+    return MaterialApp(
+      title: 'Personal Expenses',
+      theme: ThemeData(
+        brightness: Brightness.light,
+        fontFamily: 'OpenSans',
+        primarySwatch: Colors.purple,
+        accentColor: Colors.blue,
+        textTheme: const TextTheme(
+          headline6: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+      home: const MyHomePage(appBarTitle: 'FCG : Part 4'),
     );
   }
 }
@@ -31,36 +39,36 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _userTransactions = [
-    Transaction(
-      id: 't1',
-      title: 'New Shoes',
-      amount: 69.99,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't2',
-      title: 'Weekly Groceries',
-      amount: 16.53,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't3',
-      title: 'Gas',
-      amount: 20,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't4',
-      title: 'Breaking Time',
-      amount: 2.8,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't5',
-      title: 'App Purchase',
-      amount: 12,
-      date: DateTime.now(),
-    ),
+    // Transaction(
+    //   id: 't1',
+    //   title: 'New Shoes',
+    //   amount: 69.99,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //   id: 't2',
+    //   title: 'Weekly Groceries',
+    //   amount: 16.53,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //   id: 't3',
+    //   title: 'Gas',
+    //   amount: 20,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //   id: 't4',
+    //   title: 'Breaking Time',
+    //   amount: 2.8,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //   id: 't5',
+    //   title: 'App Purchase',
+    //   amount: 12,
+    //   date: DateTime.now(),
+    // ),
   ];
 
   void _addNewTransaction(String txTitle, double txAmount) {
@@ -76,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void openModalTransaction() {
+  void _openModalTransaction() {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext modalContext) {
@@ -93,11 +101,18 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.appBarTitle),
+        centerTitle: false,
+        title: Text(
+          widget.appBarTitle,
+          style: const TextStyle(
+            fontSize: 20,
+            fontFamily: 'OpenSans',
+          ),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: openModalTransaction,
+            onPressed: _openModalTransaction,
           ),
         ],
       ),
@@ -112,10 +127,10 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.all(0),
               height: null,
               width: double.infinity,
-              child: const Card(
-                color: Colors.purple,
+              child: Card(
+                color: Theme.of(context).primaryColor,
                 elevation: 3,
-                child: Padding(
+                child: const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text('Chart!'),
                 ),
@@ -128,9 +143,8 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         elevation: 3,
-        backgroundColor: Colors.purple,
         child: const Icon(Icons.add),
-        onPressed: openModalTransaction,
+        onPressed: _openModalTransaction,
       ),
     );
   }
