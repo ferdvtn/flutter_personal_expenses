@@ -13,8 +13,8 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(color: null),
-      height: 450,
+      decoration: BoxDecoration(color: Theme.of(context).secondaryHeaderColor),
+      width: double.infinity,
       child: transactions.isEmpty
           ? Column(
               children: [

@@ -117,30 +117,44 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: Text(
-          widget.appBarTitle,
-          style: const TextStyle(
-            fontSize: 20,
-            fontFamily: 'OpenSans',
-          ),
+    final appBar = AppBar(
+      centerTitle: false,
+      title: Text(
+        widget.appBarTitle,
+        style: const TextStyle(
+          fontSize: 20,
+          fontFamily: 'OpenSans',
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: _openModalTransaction,
-          ),
-        ],
       ),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: _openModalTransaction,
+        ),
+      ],
+    );
+
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.start,
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Chart(_recentTransactions),
-            TransactionList(_userTransactions, _deleteTransaction),
+            Container(
+                padding: const EdgeInsets.all(0.0),
+                height: (MediaQuery.of(context).size.height -
+                        MediaQuery.of(context).padding.top -
+                        appBar.preferredSize.height) *
+                    0.3,
+                child: Chart(_recentTransactions)),
+            Container(
+                padding: const EdgeInsets.all(0.0),
+                height: (MediaQuery.of(context).size.height -
+                        MediaQuery.of(context).padding.top -
+                        appBar.preferredSize.height) *
+                    0.7,
+                child: TransactionList(_userTransactions, _deleteTransaction)),
           ],
         ),
       ),
