@@ -125,6 +125,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
     final appBar = AppBar(
       centerTitle: false,
       title: Text(
@@ -142,6 +146,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
 
+    final bodyHeight = (MediaQuery.of(context).size.height -
+        MediaQuery.of(context).padding.top -
+        appBar.preferredSize.height);
+
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
@@ -149,42 +157,50 @@ class _MyHomePageState extends State<MyHomePage> {
           // mainAxisAlignment: MainAxisAlignment.start,
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      MediaQuery.of(context).padding.top -
-                      appBar.preferredSize.height) *
-                  0.3,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Show chart : '),
-                  Switch(
-                    value: _showChart,
-                    onChanged: (value) {
-                      setState(() => _showChart = value);
-                    },
-                  ),
-                ],
+            if (isPortrait)
+              Container(
+                padding: const EdgeInsets.all(0.0),
+                height: bodyHeight * 0.3,
+                child: Chart(_recentTransactions),
               ),
-            ),
-            _showChart
-                ? Container(
-                    padding: const EdgeInsets.all(0.0),
-                    height: (MediaQuery.of(context).size.height -
-                            MediaQuery.of(context).padding.top -
-                            appBar.preferredSize.height) *
-                        0.7,
-                    child: Chart(_recentTransactions),
-                  )
-                : Container(
-                    padding: const EdgeInsets.all(0.0),
-                    height: (MediaQuery.of(context).size.height -
-                            MediaQuery.of(context).padding.top -
-                            appBar.preferredSize.height) *
-                        0.7,
-                    child:
-                        TransactionList(_userTransactions, _deleteTransaction),
-                  ),
+            if (isPortrait)
+              Container(
+                padding: const EdgeInsets.all(0.0),
+                height: bodyHeight * 0.7,
+                child: TransactionList(_userTransactions, _deleteTransaction),
+              ),
+            if (isLandscape)
+              Container(
+                height: bodyHeight * 0.3,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Show Chart : ',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    Switch(
+                      value: _showChart,
+                      onChanged: (value) {
+                        setState(() => _showChart = value);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            if (isLandscape)
+              _showChart
+                  ? Container(
+                      padding: const EdgeInsets.all(0.0),
+                      height: bodyHeight * 0.7,
+                      child: Chart(_recentTransactions),
+                    )
+                  : Container(
+                      padding: const EdgeInsets.all(0.0),
+                      height: bodyHeight * 0.7,
+                      child: TransactionList(
+                          _userTransactions, _deleteTransaction),
+                    ),
           ],
         ),
       ),
