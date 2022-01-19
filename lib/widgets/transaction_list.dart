@@ -16,21 +16,28 @@ class TransactionList extends StatelessWidget {
       decoration: BoxDecoration(color: Theme.of(context).secondaryHeaderColor),
       width: double.infinity,
       child: transactions.isEmpty
-          ? Column(
-              children: [
-                Text(
-                  'No transaction added yet',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                Container(
-                  margin: const EdgeInsets.all(0.0),
-                  height: 100,
-                  child: Image.asset(
-                    'assets/images/waiting.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
+          ? LayoutBuilder(
+              builder: (context, constraints) {
+                return Column(
+                  children: [
+                    Container(
+                      height: constraints.maxHeight * 0.2,
+                      child: Text(
+                        'No transaction added yet',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(0.0),
+                      height: constraints.maxHeight * 0.8,
+                      child: Image.asset(
+                        'assets/images/waiting.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
+                );
+              },
             )
           : ListView.builder(
               itemCount: transactions.length,
