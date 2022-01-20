@@ -31,7 +31,7 @@ class ChartBar extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.amber,
+                      color: Theme.of(context).colorScheme.secondary,
                       border: Border.all(
                         color: Colors.grey,
                         width: 1.0,

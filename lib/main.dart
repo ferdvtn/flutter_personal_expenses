@@ -1,5 +1,8 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 import './widgets/transaction_new.dart';
 import './widgets/transaction_list.dart';
 import './widgets/chart.dart';
@@ -25,7 +28,9 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light,
         fontFamily: 'OpenSans',
         primarySwatch: Colors.purple,
-        accentColor: Colors.amber, // ignore: deprecated_member_use
+        accentColor: Platform.isAndroid
+            ? Colors.amber
+            : Colors.blueGrey, // ignore: deprecated_member_use
         errorColor: Colors.pinkAccent,
         textTheme: const TextTheme(
           headline6: TextStyle(fontWeight: FontWeight.bold),
@@ -125,34 +130,52 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-    final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
-    final appBar = AppBar(
-      centerTitle: false,
-      title: Text(
-        widget.appBarTitle,
-        style: const TextStyle(
-          fontSize: 20,
-          fontFamily: 'OpenSans',
-        ),
-      ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: _openModalTransaction,
-        ),
-      ],
-    );
+    var appBarTemplate = Platform.isAndroid
+        ? AppBar(
+            centerTitle: false,
+            title: Text(
+              widget.appBarTitle,
+              style: const TextStyle(
+                fontSize: 20,
+                fontFamily: 'OpenSans',
+              ),
+            ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: _openModalTransaction,
+              ),
+            ],
+          )
+        : CupertinoNavigationBar(
+            middle: Text(
+              widget.appBarTitle,
+              style: const TextStyle(
+                fontSize: 20,
+                fontFamily: 'OpenSans',
+              ),
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  onTap: _openModalTransaction,
+                  child: const Icon(CupertinoIcons.add),
+                )
+              ],
+            ),
+          );
 
-    final bodyHeight = (MediaQuery.of(context).size.height -
-        MediaQuery.of(context).padding.top -
-        appBar.preferredSize.height);
+    final appBar = appBarTemplate as PreferredSizeWidget;
+    final mediaQuery = MediaQuery.of(context);
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
+    final isPortrait = mediaQuery.orientation == Orientation.portrait;
+    final bodyHeight = mediaQuery.size.height -
+        mediaQuery.padding.top -
+        appBar.preferredSize.height;
 
-    return Scaffold(
-      appBar: appBar,
-      body: SingleChildScrollView(
+    final appBody = SafeArea(
+      child: SingleChildScrollView(
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.start,
           // crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,6 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             if (isLandscape)
               Container(
+                color: Theme.of(context).secondaryHeaderColor,
                 height: bodyHeight * 0.3,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -179,7 +203,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       'Show Chart : ',
                       style: Theme.of(context).textTheme.headline6,
                     ),
-                    Switch(
+                    Switch.adaptive(
+                      activeColor: Theme.of(context).colorScheme.secondary,
                       value: _showChart,
                       onChanged: (value) {
                         setState(() => _showChart = value);
@@ -204,12 +229,27 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        elevation: 3,
-        child: const Icon(Icons.add),
-        onPressed: _openModalTransaction,
-      ),
     );
+
+    // scaffold
+    final androidScaffold = Scaffold(
+      appBar: appBar,
+      body: appBody,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Platform.isAndroid
+          ? FloatingActionButton(
+              elevation: 3,
+              child: const Icon(Icons.add),
+              onPressed: _openModalTransaction,
+            )
+          : Container(),
+    );
+
+    final iosScaffold = CupertinoPageScaffold(
+      navigationBar: appBar as ObstructingPreferredSizeWidget,
+      child: appBody,
+    );
+
+    return Platform.isAndroid ? androidScaffold : iosScaffold;
   }
 }

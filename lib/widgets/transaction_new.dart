@@ -30,56 +30,64 @@ class _TransactionNewState extends State<TransactionNew> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          TextField(
-            decoration: const InputDecoration(labelText: 'Title'),
-            controller: _titleController,
-            onSubmitted: (_) {},
-          ),
-          TextField(
-            decoration: const InputDecoration(labelText: 'Amount'),
-            controller: _amountController,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            onSubmitted: (_) {},
-          ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  'Picked date: ${DateFormat.yMd().format(_selectedDate)}',
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.only(
+          top: 10,
+          right: 10,
+          left: 10,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            TextField(
+              decoration: const InputDecoration(labelText: 'Title'),
+              controller: _titleController,
+              onSubmitted: (_) {},
+            ),
+            TextField(
+              decoration: const InputDecoration(labelText: 'Amount'),
+              controller: _amountController,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+              onSubmitted: (_) {},
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Picked date: ${DateFormat.yMd().format(_selectedDate)}',
+                  ),
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  showDatePicker(
-                    context: context,
-                    initialDate: _selectedDate,
-                    firstDate: DateTime(2020),
-                    lastDate: DateTime.now(),
-                  ).then(
-                    (value) {
-                      if (value == null) return;
-                      setState(() => _selectedDate = value);
-                    },
-                  );
-                },
-                child: const Text(
-                  'Choose date',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              )
-            ],
-          ),
-          ElevatedButton(
-            onPressed: () => _submitTransaction(),
-            child: const Text('Add Transaction'),
-          )
-        ],
+                TextButton(
+                  onPressed: () {
+                    showDatePicker(
+                      context: context,
+                      initialDate: _selectedDate,
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime.now(),
+                    ).then(
+                      (value) {
+                        if (value == null) return;
+                        setState(() => _selectedDate = value);
+                      },
+                    );
+                  },
+                  child: const Text(
+                    'Choose date',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
+            ),
+            ElevatedButton(
+              onPressed: () => _submitTransaction(),
+              child: const Text('Add Transaction'),
+            )
+          ],
+        ),
       ),
     );
   }

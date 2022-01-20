@@ -13,7 +13,6 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: Theme.of(context).secondaryHeaderColor),
       width: double.infinity,
       child: transactions.isEmpty
           ? LayoutBuilder(
@@ -56,13 +55,26 @@ class TransactionList extends StatelessWidget {
                         ),
                       ),
                     ),
-                    trailing: IconButton(
-                      onPressed: () => deleteHandler(transactions[index].id),
-                      icon: Icon(
-                        Icons.delete,
-                        color: Theme.of(context).errorColor,
-                      ),
-                    ),
+                    trailing: MediaQuery.of(context).size.width > 300
+                        ? TextButton.icon(
+                            onPressed: () => deleteHandler(
+                              transactions[index].id,
+                            ),
+                            icon: Icon(
+                              Icons.delete,
+                              color: Theme.of(context).errorColor,
+                            ),
+                            label: const Text('Delete'),
+                          )
+                        : IconButton(
+                            onPressed: () => deleteHandler(
+                              transactions[index].id,
+                            ),
+                            icon: Icon(
+                              Icons.delete,
+                              color: Theme.of(context).errorColor,
+                            ),
+                          ),
                     title: Text(transactions[index].title),
                     subtitle: Text(
                       DateFormat.yMMMd().format(transactions[index].date),

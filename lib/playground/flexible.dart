@@ -7,7 +7,7 @@ class PlayFlexible extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flexible Demo App'),
+        title: const Text('Flexible Demo App'),
       ),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -16,7 +16,7 @@ class PlayFlexible extends StatelessWidget {
             height: 100,
             width: 100,
             color: Colors.red,
-            child: Center(
+            child: const Center(
               child: Text('Text 1'),
             ),
           ),
@@ -24,7 +24,7 @@ class PlayFlexible extends StatelessWidget {
             flex: 1,
             child: Container(
               color: Colors.green,
-              child: Text('Text 2'),
+              child: const Text('Text 2'),
             ),
           ),
           Flexible(
@@ -32,7 +32,7 @@ class PlayFlexible extends StatelessWidget {
             flex: 1,
             child: Container(
               color: Colors.blue,
-              child: Text('Text 3'),
+              child: const Text('Text 3'),
             ),
           ),
         ],
