@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.purple,
         accentColor: Platform.isAndroid
             ? Colors.amber
-            : Colors.blueGrey, // ignore: deprecated_member_use
+            : Colors.yellow, // ignore: deprecated_member_use
         errorColor: Colors.pinkAccent,
         textTheme: const TextTheme(
           headline6: TextStyle(fontWeight: FontWeight.bold),

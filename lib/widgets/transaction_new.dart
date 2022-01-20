@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../widgets/adaptive_flat_button.dart';
+
 class TransactionNew extends StatefulWidget {
   const TransactionNew(this.submitHandler, {Key? key}) : super(key: key);
 
@@ -26,6 +28,20 @@ class _TransactionNewState extends State<TransactionNew> {
     widget.submitHandler(titleText, amountText, _selectedDate);
     // Navigator.of(context).pop();
     Navigator.pop(context);
+  }
+
+  void _presentDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    ).then(
+      (value) {
+        if (value == null) return;
+        setState(() => _selectedDate = value);
+      },
+    );
   }
 
   @override
@@ -61,24 +77,9 @@ class _TransactionNewState extends State<TransactionNew> {
                     'Picked date: ${DateFormat.yMd().format(_selectedDate)}',
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    showDatePicker(
-                      context: context,
-                      initialDate: _selectedDate,
-                      firstDate: DateTime(2020),
-                      lastDate: DateTime.now(),
-                    ).then(
-                      (value) {
-                        if (value == null) return;
-                        setState(() => _selectedDate = value);
-                      },
-                    );
-                  },
-                  child: const Text(
-                    'Choose date',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
+                AdaptiveFlatButton(
+                  'Choose date',
+                  _presentDatePicker,
                 )
               ],
             ),
