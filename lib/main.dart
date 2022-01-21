@@ -50,7 +50,25 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    print(state);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance!.addObserver(this);
+  }
+
   final List<Transaction> _userTransactions = [
     Transaction(
       id: 't1',
@@ -253,7 +271,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     final iosScaffold = CupertinoPageScaffold(
-      navigationBar: appBar as ObstructingPreferredSizeWidget,
+      // navigationBar: appBar as ObstructingPreferredSizeWidget,
       child: appBody,
     );
 
