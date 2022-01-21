@@ -174,58 +174,65 @@ class _MyHomePageState extends State<MyHomePage> {
         mediaQuery.padding.top -
         appBar.preferredSize.height;
 
+    List<Widget> _portraitContent() {
+      return [
+        Container(
+          padding: const EdgeInsets.all(0.0),
+          height: bodyHeight * 0.3,
+          child: Chart(_recentTransactions),
+        ),
+        Container(
+          padding: const EdgeInsets.all(0.0),
+          height: bodyHeight * 0.7,
+          child: TransactionList(_userTransactions, _deleteTransaction),
+        ),
+      ];
+    }
+
+    List<Widget> _landscapeContent() {
+      return [
+        Container(
+          color: Theme.of(context).secondaryHeaderColor,
+          height: bodyHeight * 0.3,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Show Chart : ',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              Switch.adaptive(
+                activeColor: Theme.of(context).colorScheme.secondary,
+                value: _showChart,
+                onChanged: (value) {
+                  setState(() => _showChart = value);
+                },
+              ),
+            ],
+          ),
+        ),
+        _showChart
+            ? Container(
+                padding: const EdgeInsets.all(0.0),
+                height: bodyHeight * 0.7,
+                child: Chart(_recentTransactions),
+              )
+            : Container(
+                padding: const EdgeInsets.all(0.0),
+                height: bodyHeight * 0.7,
+                child: TransactionList(_userTransactions, _deleteTransaction),
+              ),
+      ];
+    }
+
     final appBody = SafeArea(
       child: SingleChildScrollView(
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.start,
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (isPortrait)
-              Container(
-                padding: const EdgeInsets.all(0.0),
-                height: bodyHeight * 0.3,
-                child: Chart(_recentTransactions),
-              ),
-            if (isPortrait)
-              Container(
-                padding: const EdgeInsets.all(0.0),
-                height: bodyHeight * 0.7,
-                child: TransactionList(_userTransactions, _deleteTransaction),
-              ),
-            if (isLandscape)
-              Container(
-                color: Theme.of(context).secondaryHeaderColor,
-                height: bodyHeight * 0.3,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Show Chart : ',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    Switch.adaptive(
-                      activeColor: Theme.of(context).colorScheme.secondary,
-                      value: _showChart,
-                      onChanged: (value) {
-                        setState(() => _showChart = value);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            if (isLandscape)
-              _showChart
-                  ? Container(
-                      padding: const EdgeInsets.all(0.0),
-                      height: bodyHeight * 0.7,
-                      child: Chart(_recentTransactions),
-                    )
-                  : Container(
-                      padding: const EdgeInsets.all(0.0),
-                      height: bodyHeight * 0.7,
-                      child: TransactionList(
-                          _userTransactions, _deleteTransaction),
-                    ),
+            if (isPortrait) ..._portraitContent(),
+            if (isLandscape) ..._landscapeContent(),
           ],
         ),
       ),

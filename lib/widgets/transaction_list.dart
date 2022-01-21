@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../models/transaction.dart';
+import './transaction_item.dart';
 
 class TransactionList extends StatelessWidget {
   const TransactionList(this.transactions, this.deleteHandler, {Key? key})
@@ -41,46 +41,9 @@ class TransactionList extends StatelessWidget {
           : ListView.builder(
               itemCount: transactions.length,
               itemBuilder: (context, index) {
-                return Card(
-                  elevation: 3,
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 30,
-                      child: FittedBox(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text('\$${transactions[index].amount}'),
-                        ),
-                      ),
-                    ),
-                    trailing: MediaQuery.of(context).size.width > 300
-                        ? TextButton.icon(
-                            onPressed: () => deleteHandler(
-                              transactions[index].id,
-                            ),
-                            icon: Icon(
-                              Icons.delete,
-                              color: Theme.of(context).errorColor,
-                            ),
-                            label: const Text('Delete'),
-                          )
-                        : IconButton(
-                            onPressed: () => deleteHandler(
-                              transactions[index].id,
-                            ),
-                            icon: Icon(
-                              Icons.delete,
-                              color: Theme.of(context).errorColor,
-                            ),
-                          ),
-                    title: Text(transactions[index].title),
-                    subtitle: Text(
-                      DateFormat.yMMMd().format(transactions[index].date),
-                    ),
-                  ),
-                );
+                return TransactionItem(
+                    transaction: transactions[index],
+                    deleteHandler: deleteHandler);
               },
             ),
     );

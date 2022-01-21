@@ -8,20 +8,20 @@ class AdaptiveFlatButton extends StatelessWidget {
       : super(key: key);
 
   final String text;
-  final VoidCallback handler;
+  final Function handler;
 
   @override
   Widget build(BuildContext context) {
     return Platform.isAndroid
         ? TextButton(
-            onPressed: handler,
+            onPressed: () => handler(),
             child: Text(
               text,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           )
         : CupertinoButton(
-            onPressed: handler,
+            onPressed: () => handler(),
             child: Text(
               text,
               style: const TextStyle(fontWeight: FontWeight.bold),
